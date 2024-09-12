@@ -60,7 +60,9 @@ This project involves a classifier that uses a fine-tuned ResNet18 model to reco
 
     The script will open your webcam, display a rectangle to help you position the card, and capture an image after 5 seconds. It will then classify the card and display the predicted card image and the captured screenshot in a Tkinter window.
 
-3. **Test the trained model:**
+    ![Webcam Capture](w1.png)
+
+4. **Test the trained model:**
 
     You can test the trained model using the `card_classifier_usage.py` script. This script allows you to provide an image for classification and will display the predicted result. Run the script with:
 
@@ -68,7 +70,7 @@ This project involves a classifier that uses a fine-tuned ResNet18 model to reco
     python card_classifier_usage.py
     ```
 
-4. **Interact with the Interface:**
+5. **Interact with the Interface:**
 
     - **Next Button:** Click the "Next" button to close the Tkinter window and start a new capture.
 
