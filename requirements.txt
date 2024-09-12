@@ -1,0 +1,7 @@
+torch==2.0.0
+torchvision==0.15.0
+Pillow==9.5.0
+scikit-learn==1.2.2
+numpy==1.24.3
+requests==2.31.0
+pokemontcgsdk==2.3.0
