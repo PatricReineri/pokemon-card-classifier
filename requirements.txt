@@ -5,3 +5,4 @@ scikit-learn==1.2.2
 numpy==1.24.3
 requests==2.31.0
 pokemontcgsdk==2.3.0
+tkinter==0.1.0
