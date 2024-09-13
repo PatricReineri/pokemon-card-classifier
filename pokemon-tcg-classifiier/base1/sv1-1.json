@@ -1,0 +1,120 @@
+{
+    "abilities": null,
+    "artist": "Shigenori Negishi",
+    "ancientTrait": null,
+    "attacks": [
+        {
+            "name": "Guard Press",
+            "cost": [
+                "Colorless",
+                "Colorless"
+            ],
+            "convertedEnergyCost": 2,
+            "damage": "10",
+            "text": "During your opponent's next turn, this Pok\u00e9mon takes 30 less damage from attacks (after applying Weakness and Resistance)."
+        }
+    ],
+    "cardmarket": {
+        "url": "https://prices.pokemontcg.io/cardmarket/sv1-1",
+        "updatedAt": "2024/09/05",
+        "prices": {
+            "averageSellPrice": 0.04,
+            "lowPrice": 0.02,
+            "trendPrice": 0.04,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.18,
+            "reverseHoloLow": 0.02,
+            "reverseHoloTrend": 0.14,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.03,
+            "avg7": 0.03,
+            "avg30": 0.04,
+            "reverseHoloAvg1": 0.15,
+            "reverseHoloAvg7": 0.13,
+            "reverseHoloAvg30": 0.18
+        }
+    },
+    "convertedRetreatCost": 2,
+    "evolvesFrom": null,
+    "flavorText": "It spits out a fluid that it uses to glue tree bark to its body. The fluid hardens when it touches air.",
+    "hp": "60",
+    "id": "sv1-1",
+    "images": {
+        "small": "https://images.pokemontcg.io/sv1/1.png",
+        "large": "https://images.pokemontcg.io/sv1/1_hires.png"
+    },
+    "legalities": {
+        "unlimited": "Legal",
+        "expanded": "Legal",
+        "standard": "Legal"
+    },
+    "regulationMark": "G",
+    "name": "Pineco",
+    "nationalPokedexNumbers": [
+        204
+    ],
+    "number": "1",
+    "rarity": "Common",
+    "resistances": null,
+    "retreatCost": [
+        "Colorless",
+        "Colorless"
+    ],
+    "rules": null,
+    "set": {
+        "id": "sv1",
+        "images": {
+            "symbol": "https://images.pokemontcg.io/sv1/symbol.png",
+            "logo": "https://images.pokemontcg.io/sv1/logo.png"
+        },
+        "legalities": {
+            "unlimited": "Legal",
+            "expanded": "Legal",
+            "standard": "Legal"
+        },
+        "name": "Scarlet & Violet",
+        "printedTotal": 198,
+        "ptcgoCode": null,
+        "releaseDate": "2023/03/31",
+        "series": "Scarlet & Violet",
+        "total": 258,
+        "updatedAt": "2023/03/31 15:45:00"
+    },
+    "subtypes": [
+        "Basic"
+    ],
+    "supertype": "Pok\u00e9mon",
+    "tcgplayer": {
+        "url": "https://prices.pokemontcg.io/tcgplayer/sv1-1",
+        "updatedAt": "2024/09/05",
+        "prices": {
+            "normal": {
+                "low": 0.01,
+                "mid": 0.08,
+                "high": 2.95,
+                "market": 0.06,
+                "directLow": 0.04
+            },
+            "holofoil": null,
+            "reverseHolofoil": {
+                "low": 0.04,
+                "mid": 0.15,
+                "high": 2.95,
+                "market": 0.14,
+                "directLow": 0.08
+            },
+            "firstEditionHolofoil": null,
+            "firstEditionNormal": null
+        }
+    },
+    "types": [
+        "Grass"
+    ],
+    "weaknesses": [
+        {
+            "type": "Fire",
+            "value": "\u00d72"
+        }
+    ]
+}
