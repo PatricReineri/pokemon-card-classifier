@@ -33,6 +33,7 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
     ```bash
     python download_set.py
     ```
+The `download_set.py` script will create a `base1_images` folder for card images and a `base1` folder for JSON files. Make sure these directories are populated with the downloaded data.
 
 4. **Train the model:**
 
@@ -41,10 +42,6 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
     ```bash
     python card-classifier.py
     ```
-
-5. **Prepare the directories:**
-
-    - The `download_set.py` script will create a `base1_images` folder for card images and a `base1` folder for JSON files. Make sure these directories are populated with the downloaded data.
 
 ## Usage
 
