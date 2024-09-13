@@ -42,7 +42,7 @@ class PokemonClassifier:
         self.model = self.model.to(self.device)
         
         
-        self.model.load_state_dict(torch.load(model_path, map_location=self.device))
+        self.model.load_state_dict(torch.load(model_path, map_location=self.device, weights_only=True))
         self.model.eval()
 
        
@@ -143,7 +143,7 @@ class PokemonClassifier:
 if __name__ == "__main__":
     classifier = PokemonClassifier(model_path="pokemon_classifier.pth", label_encoder_path='classes.npy')
     
-    image_path = '/home/patric/Desktop/pippo/files/tcg-classifier/base1_images/sv3-101.png'
+    image_path = 'base1_images/sv3-101.png'
     try:
    
         prediction = classifier.predict_image(image_path)

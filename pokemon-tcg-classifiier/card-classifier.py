@@ -84,7 +84,7 @@ transform =  transforms.Compose([
 ])
 
 
-dataset_path = '/home/patric/Desktop/pippo/files/tcg-classifier/base1_images'
+dataset_path = 'base1_images'
 print(os.path.exists(dataset_path))
 print("Dataset path:", os.path.abspath(dataset_path))
 
@@ -108,7 +108,7 @@ model = model.to(device)
 model_path = "pokemon_classifier.pth"
 if os.path.exists(model_path):
     print(f"Found existing model file '{model_path}', loading weights...")
-    model.load_state_dict(torch.load(model_path, map_location=device))
+    model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
 else:
     print(f"No pre-trained model found, starting training from scratch.")
 
