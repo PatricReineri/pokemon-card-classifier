@@ -28,16 +28,16 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
 
 3. **Download images and data:**
 
-    Before training the model, you need to download Pokémon card images and data. Use the `download_set.py` script to download all necessary images and data. This script will save the images and JSON files in the appropriate folders:
+    Before training the model, you need to download Pokémon card images and data. Use the `download_set.py` script to download all necessary images and data. This script will save the images and JSON files       in the appropriate folders:
 
     ```bash
     python download_set.py
     ```
-The `download_set.py` script will create a `base1_images` folder for card images and a `base1` folder for JSON files. Make sure these directories are populated with the downloaded data.
+    The `download_set.py` script will create a `base1_images` folder for card images and a `base1` folder for JSON files. Make sure these directories are populated with the downloaded data.
 
 4. **Train the model:**
 
-    Once the images and data have been downloaded, you can train the EfficientNetB1 model using the `card-classifier.py` script. This will generate the required model file (`pokemon_classifier_crop_cards.pth`) and the label encoder file (`classes.npy`):
+    Once the images and data have been downloaded, you can train the EfficientNetB1 model using the `card-classifier.py` script. This will generate the required model file       (`pokemon_classifier_crop_cards.pth`) and the label encoder file (`classes.npy`):
 
     ```bash
     python card-classifier.py
