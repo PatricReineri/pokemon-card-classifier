@@ -1,98 +1,98 @@
 # Pokémon Card Classifier
 
-Questo progetto utilizza un modello fine-tuned **EfficientNetB1** per riconoscere le carte Pokémon da immagini. Il modello è stato addestrato su un dataset di immagini di carte Pokémon e può classificare con precisione nuove carte catturate tramite webcam. Il progetto include anche un'interfaccia grafica per visualizzare la carta prevista accanto alla schermata catturata dalla fotocamera.
+This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon cards from images. The model has been trained on a dataset of Pokémon card images and can accurately classify new cards captured via webcam. The project also includes a graphical interface to display the predicted card alongside the screenshot captured by the camera.
 
-## Funzionalità
+## Features
 
-- **Classificazione delle Carte:** Utilizza un modello fine-tuned EfficientNetB1 per riconoscere le carte Pokémon.
-- **Cattura Immagini:** Cattura immagini delle carte utilizzando una webcam.
-- **Interfaccia Grafica:** Mostra la carta prevista e lo screenshot catturato in una finestra Tkinter.
-- **Gestione dei Dati:** Supporta il salvataggio degli screenshot e la gestione dei file JSON per le informazioni sulle carte.
+- **Card Classification:** Uses a fine-tuned EfficientNetB1 model to recognize Pokémon cards.
+- **Image Capture:** Captures images of the cards using a webcam.
+- **Graphical Interface:** Displays the predicted card and the captured screenshot in a Tkinter window.
+- **Data Management:** Supports saving screenshots and handling JSON files for card information.
 
-## Installazione
+## Installation
 
-1. **Clonare il repository:**
+1. **Clone the repository:**
 
     ```bash
     git clone https://github.com/PatricReineri/pokemon-card-classifier.git
     cd pokemon-card-classifier
     ```
 
-2. **Installare le librerie richieste:**
+2. **Install required libraries:**
 
-    Assicurati di avere Python 3.x installato. Puoi installare tutte le librerie richieste utilizzando il file `requirements.txt` fornito nel repository:
+    Make sure you have Python 3.x installed. You can install all required libraries using the `requirements.txt` file provided in the repository:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-3. **Scaricare immagini e dati:**
+3. **Download images and data:**
 
-    Prima di addestrare il modello, è necessario scaricare immagini e dati delle carte Pokémon. Usa lo script `download_set.py` per scaricare tutte le immagini e i dati necessari. Questo script salverà le immagini e i file JSON nelle cartelle appropriate:
+    Before training the model, you need to download Pokémon card images and data. Use the `download_set.py` script to download all necessary images and data. This script will save the images and JSON files in the appropriate folders:
 
     ```bash
     python download_set.py
     ```
 
-4. **Addestrare il modello:**
+4. **Train the model:**
 
-    Una volta scaricate le immagini e i dati, puoi addestrare il modello EfficientNetB1 utilizzando lo script `card-classifier.py`. Questo genererà il file modello richiesto (`pokemon_classifier_crop_cards.pth`) e il file del label encoder (`classes.npy`):
+    Once the images and data have been downloaded, you can train the EfficientNetB1 model using the `card-classifier.py` script. This will generate the required model file (`pokemon_classifier_crop_cards.pth`) and the label encoder file (`classes.npy`):
 
     ```bash
     python card-classifier.py
     ```
 
-5. **Preparare le directory:**
+5. **Prepare the directories:**
 
-    - Lo script `download_set.py` creerà una cartella `base1_images` per le immagini delle carte e una cartella `base1` per i file JSON. Assicurati che queste directory siano popolate con i dati scaricati.
+    - The `download_set.py` script will create a `base1_images` folder for card images and a `base1` folder for JSON files. Make sure these directories are populated with the downloaded data.
 
-## Utilizzo
+## Usage
 
-1. **Esegui lo script del classificatore:**
+1. **Run the classifier script:**
 
-    Per iniziare a catturare immagini e classificare le carte Pokémon, esegui il seguente comando:
+    To start capturing images and classifying Pokémon cards, run the following command:
 
     ```bash
     python cam-tcgclassifier.py
     ```
 
-2. **Cattura e Classifica:**
+2. **Capture and Classify:**
 
-    Lo script aprirà la tua webcam, mostrerà un rettangolo per aiutarti a posizionare la carta e catturerà un'immagine dopo 5 secondi. Successivamente, classificherà la carta e mostrerà l'immagine della carta prevista e lo screenshot catturato in una finestra Tkinter.
+    The script will open your webcam, show a rectangle to help you position the card, and capture an image after 5 seconds. It will then classify the card and display the predicted card image and the captured screenshot in a Tkinter window.
 
     ![Webcam Capture](w1.png)
 
-4. **Testare il modello addestrato:**
+4. **Test the trained model:**
 
-    Puoi testare il modello addestrato utilizzando lo script `card_classifier_usage.py`. Questo script ti permette di fornire un'immagine per la classificazione e mostrerà il risultato previsto. Esegui lo script con:
+    You can test the trained model using the `card_classifier_usage.py` script. This script allows you to provide an image for classification and will display the predicted result. Run the script with:
 
     ```bash
     python card_classifier_usage.py
     ```
 
-5. **Interagire con l'Interfaccia:**
+5. **Interact with the Interface:**
 
-    - **Pulsante "Next":** Clicca sul pulsante "Next" per chiudere la finestra Tkinter e iniziare una nuova cattura.
+    - **"Next" Button:** Click the "Next" button to close the Tkinter window and start a new capture.
 
-## Spiegazione del Codice
+## Code Explanation
 
-- **`download_set.py`**: Utilizzato per scaricare immagini e dati delle carte Pokémon. Salva immagini e file JSON necessari per l'addestramento e la classificazione.
-- **`card-classifier.py`**: Utilizzato per addestrare il modello EfficientNetB1 e generare i file del modello e del label encoder.
-- **`cam-tcgclassifier.py`**: Contiene il codice per catturare immagini utilizzando la webcam, classificare le immagini catturate con il classificatore di carte Pokémon e mostrare i risultati tramite Tkinter.
-- **`card_classifier_usage.py`**: Permette di testare il modello addestrato con immagini fornite per verificare i risultati di classificazione.
-- **`display_predicted_card(image_path)`**: Funzione che crea una finestra Tkinter per visualizzare la carta prevista e lo screenshot.
-- **`capture_image()`**: Cattura un'immagine dalla webcam e la salva come `screenshot.png`.
-- **`classify_and_show_image()`**: Classifica l'immagine catturata e visualizza il risultato.
+- **`download_set.py`**: Used to download Pokémon card images and data. It saves images and JSON files required for training and classification.
+- **`card-classifier.py`**: Used to train the EfficientNetB1 model and generate the necessary model and label encoder files.
+- **`cam-tcgclassifier.py`**: Contains the code to capture images using the webcam, classify the captured images with the Pokémon card classifier, and display the results using Tkinter.
+- **`card_classifier_usage.py`**: Allows testing the trained model with provided images to verify classification results.
+- **`display_predicted_card(image_path)`**: A function that creates a Tkinter window to display the predicted card and screenshot.
+- **`capture_image()`**: Captures an image from the webcam and saves it as `screenshot.png`.
+- **`classify_and_show_image()`**: Classifies the captured image and displays the result.
 
-## Contribuire
+## Contributing
 
-Se desideri contribuire a questo progetto, fai un fork del repository e crea una pull request con le tue modifiche. Per cambiamenti maggiori, apri prima una issue per discutere cosa vorresti cambiare.
+If you would like to contribute to this project, please fork the repository and create a pull request with your changes. For major changes, please open an issue first to discuss what you would like to change.
 
-## Licenza
+## License
 
-Questo progetto è concesso in licenza sotto la Licenza MIT - consulta il file [LICENSE](LICENSE) per i dettagli.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Ringraziamenti
+## Acknowledgements
 
-- **[EfficientNet](https://arxiv.org/abs/1905.11946)**: Per l'architettura del modello.
-- **[OpenCV](https://opencv.org/)**: Per gli strumenti di visione artificiale utilizzati per la cattura delle immagini.
+- **[EfficientNet](https://arxiv.org/abs/1905.11946)**: For the model architecture.
+- **[OpenCV](https://opencv.org/)**: For the computer vision tools used for image capture.
