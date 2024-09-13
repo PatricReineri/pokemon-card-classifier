@@ -37,7 +37,7 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
 
 4. **Train the model:**
 
-    Once the images and data have been downloaded, you can train the EfficientNetB1 model using the `card-classifier.py` script. This will generate the required model file       (`pokemon_classifier_crop_cards.pth`) and the label encoder file (`classes.npy`):
+    Once the images and data have been downloaded, you can train the EfficientNetB1 model using the `card-classifier.py` script. This will generate the required model file       (`pokemon_classifier.pth`) and the label encoder file (`classes.npy`):
 
     ```bash
     python card-classifier.py
