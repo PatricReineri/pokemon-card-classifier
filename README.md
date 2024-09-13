@@ -59,6 +59,7 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
 
     ![Webcam Capture](w1.png)
 
+    - **"Next" Button:** Click the "Next" button to close the Tkinter window and start a new capture.
 4. **Test the trained model:**
 
     You can test the trained model using the `card_classifier_usage.py` script. This script allows you to provide an image for classification and will display the predicted result. Run the script with:
@@ -67,9 +68,6 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
     python card_classifier_usage.py
     ```
 
-5. **Interact with the Interface:**
-
-    - **"Next" Button:** Click the "Next" button to close the Tkinter window and start a new capture.
 
 ## Code Explanation
 
