@@ -8,8 +8,7 @@ import torch.optim as optim
 from torchvision import models
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
-from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
-
+from torchvision.models import efficientnet_b1, EfficientNet_B1_Weights
 import random
 
 class AddGaussianNoise(object):
@@ -18,21 +17,12 @@ class AddGaussianNoise(object):
         self.std = std
 
     def __call__(self, img):
-        
         np_img = np.array(img)
-        
-    
         if len(np_img.shape) == 2:  
             np_img = np_img[:, :, np.newaxis]
-        
-        
         noise = np.random.normal(self.mean, self.std, np_img.shape)
         noisy_img = np_img + noise
-        
-        
         noisy_img = np.clip(noisy_img, 0, 255).astype(np.uint8)
-        
-        
         return Image.fromarray(noisy_img)
     
 class CropTopHalf(object):
@@ -82,18 +72,15 @@ class PokemonCardDataset(Dataset):
         
         return image, torch.tensor(label, dtype=torch.long)
 
-transform = transforms.Compose([
-    transforms.Resize((256, 256)),  
-    CropTopHalf(), 
-    #transforms.RandomHorizontalFlip(p=0.5),
-    transforms.RandomRotation(10),
-    transforms.ColorJitter(brightness=0.3, contrast=0.3),
-    #transforms.RandomAffine(degrees=15, translate=(0.1, 0.1), scale=(0.8, 1.2), shear=10),
-    RandomBlur(p=0.3),  
-    #transforms.RandomResizedCrop((128, 128), scale=(0.7, 1.0)),  
+transform =  transforms.Compose([
+    CropTopHalf(),
+    transforms.Resize((128, 96)), 
+    #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
+    transforms.RandomRotation(degrees=5), 
+    transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+    transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    #AddGaussianNoise(mean=0, std=0.1) 
 ])
 
 
@@ -103,18 +90,20 @@ print("Dataset path:", os.path.abspath(dataset_path))
 
 pokemon_dataset = PokemonCardDataset(root_dir=dataset_path, transform=transform)
 
-
-train_loader = DataLoader(pokemon_dataset, batch_size=32, shuffle=True, num_workers=4, pin_memory=True)
-test_loader = DataLoader(pokemon_dataset, batch_size=64, shuffle=False, num_workers=4, pin_memory=True)
+train_loader = DataLoader(pokemon_dataset, batch_size=32, shuffle=True, num_workers=6, pin_memory=True)
+test_loader = DataLoader(pokemon_dataset, batch_size=64, shuffle=False, num_workers=6, pin_memory=True)
 
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-model = models.resnet18(weights="ResNet18_Weights.DEFAULT")
-num_classes = len(pokemon_dataset.label_encoder.classes_)
-model.fc = nn.Linear(model.fc.in_features, num_classes)
-model = model.to(device)
 
+model = efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT)
+
+
+
+num_classes = len(pokemon_dataset.label_encoder.classes_)
+model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
+model = model.to(device)
 
 model_path = "pokemon_classifier.pth"
 if os.path.exists(model_path):
@@ -123,15 +112,9 @@ if os.path.exists(model_path):
 else:
     print(f"No pre-trained model found, starting training from scratch.")
 
-criterion = nn.CrossEntropyLoss()
-#optimizer = optim.Adam(model.parameters(), lr=0.001)
+criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
-
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-
-
-
-
 
 def train(model, device, train_loader, optimizer, criterion, epoch):
     model.train()
@@ -165,47 +148,9 @@ def test(model, device, test_loader, criterion):
     
     return accuracy
 
-
-
-import matplotlib.pyplot as plt
-import torchvision.transforms.functional as F
-
-# Funzione per de-normalizzare l'immagine (in base ai valori di mean e std usati)
-def denormalize(tensor, mean, std):
-    for t, m, s in zip(tensor, mean, std):
-        t.mul_(s).add_(m)  # Inverso di normalizzazione (moltiplica per std, aggiungi mean)
-    return tensor
-
-# Preleva un campione dal dataset
-sample_img, sample_label = pokemon_dataset[0]  # Indice 0 o qualsiasi immagine
-
-# De-normalizza l'immagine
-mean = [0.485, 0.456, 0.406]
-std = [0.229, 0.224, 0.225]
-denormalized_img = denormalize(sample_img.clone(), mean, std)
-
-# Converte il tensore in immagine (in formato [H, W, C] per matplotlib)
-img_numpy = denormalized_img.permute(1, 2, 0).numpy()
-
-# Mostra l'immagine con matplotlib
-plt.imshow(img_numpy)
-plt.title(f"Label: {sample_label}")
-plt.axis('off')  # Nascondi assi
-plt.show()
-
-
-
-
-
-
-
-
 accuracy = 0 
 
-sample_img, sample_label = pokemon_dataset[0]  # Load a sample
-print(f"Transformed image shape: {sample_img.shape}")  # Should print the shape as [C, H, W]
-
-for epoch in range(1, 16):
+for epoch in range(1, 21):
     train(model, device, train_loader, optimizer, criterion, epoch)
     if epoch % 5 == 0:
         accuracy = test(model, device, test_loader, criterion)
@@ -215,5 +160,5 @@ for epoch in range(1, 16):
         print("Accuracy reached 99.9%, saving model...")
         torch.save(model.state_dict(), "pokemon_classifier.pth")
         break
-torch.save(model.state_dict(), "pokemon_classifier.pth")
 
+torch.save(model.state_dict(), "pokemon_classifier.pth")

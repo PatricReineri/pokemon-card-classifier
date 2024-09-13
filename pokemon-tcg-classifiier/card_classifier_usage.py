@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 from torchvision import models
 import torch.nn as nn
 from PIL import Image, ImageFilter
+from torchvision.models import efficientnet_b1, EfficientNet_B1_Weights
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 from torchvision import models
@@ -28,37 +29,38 @@ class CropTopHalf(object):
         width, height = img.size  
         cropped_img = img.crop((0, 0, width, height // 2))  
         return cropped_img
-     
+    
 class PokemonClassifier:
     def __init__(self, model_path: str, label_encoder_path: str, num_classes: int = 1289, device: str = None):
        
         self.device = torch.device(device if device else ("cuda" if torch.cuda.is_available() else "cpu"))
         
         
-        self.model = models.resnet18(weights=None)  # Do not preload weights here
-        self.model.fc = nn.Linear(self.model.fc.in_features, num_classes)
+        self.model = efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT)
+        
+        self.model.classifier[1] = nn.Linear(self.model.classifier[1].in_features, num_classes)
         self.model = self.model.to(self.device)
         
         
         self.model.load_state_dict(torch.load(model_path, map_location=self.device))
         self.model.eval()
 
-    
+       
         self.label_encoder = LabelEncoder()
         self.label_encoder.classes_ = np.load(label_encoder_path, allow_pickle=True)
 
- 
-        
-        self.transform =  transforms.Compose([
-    transforms.Resize((128, 128)),
-    CropTopHalf(),
-   # transforms.RandomHorizontalFlip(p=0.5),
-    #transforms.RandomRotation(10),  # Simple and fast rotation
-   # #transforms.ColorJitter(brightness=0.2, contrast=0.2),  # Reduced range for faster processing
-    #transforms.RandomAffine(degrees=15, translate=(0.05, 0.05), scale=(0.95, 1.05), shear=5),  # Simplified affine transformation
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
+     
+        self.transform = transforms.Compose([
+        CropTopHalf(),
+        transforms.Resize((128, 96)),  
+        #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
+        transforms.RandomRotation(degrees=5),  
+        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+        transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+
 
     def predict_image(self, image_path: str) -> str:
         """
@@ -73,20 +75,17 @@ class PokemonClassifier:
         if not os.path.isfile(image_path):
             raise FileNotFoundError(f"The image at {image_path} does not exist.")
         
-        # Load and transform the image
+       
         image = Image.open(image_path).convert("RGB")
         self.transform = transforms.Compose([
-            transforms.Resize((256, 256)),  # Optionally resize to a consistent size first
-            CropTopHalf(),  # Custom crop the top half
-            #transforms.RandomHorizontalFlip(p=0.5),
-            #transforms.RandomRotation(10),
-            transforms.ColorJitter(brightness=0.3, contrast=0.3),
-            #transforms.RandomAffine(degrees=15, translate=(0.1, 0.1), scale=(0.8, 1.2), shear=10),
-            #RandomBlur(p=0.3),  # Apply random blur with a probability of 30%
-            #transforms.RandomResizedCrop((128, 128), scale=(0.7, 1.0)),  # Randomly crop and resize
+            CropTopHalf(),
+            transforms.Resize((128, 96)),  
+            #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
+            transforms.RandomRotation(degrees=5),  
+            transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+            transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            #AddGaussianNoise(mean=0, std=0.1)  # Adjust noise levels as needed
         ])
         image = self.transform(image).unsqueeze(0)
 
@@ -144,13 +143,13 @@ class PokemonClassifier:
 if __name__ == "__main__":
     classifier = PokemonClassifier(model_path="pokemon_classifier.pth", label_encoder_path='classes.npy')
     
-    image_path = '/home/patric/Desktop/pippo/files/tcg-classifier/base1_images/sv6-104.png'
+    image_path = '/home/patric/Desktop/pippo/files/tcg-classifier/base1_images/sv3-101.png'
     try:
-        # Predict the class of the image
+   
         prediction = classifier.predict_image(image_path)
         print(f'Predicted class: {prediction}')
         
-        # Construct JSON file path based on the predicted label
+
         json_filename = f"{prediction}.json"
         json_path = os.path.join('base1', json_filename)
         

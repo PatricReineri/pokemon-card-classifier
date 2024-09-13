@@ -123,7 +123,7 @@ def display_predicted_card(image_path):
     root.mainloop()
 
 def classify_and_show_image():
-    classifier = PokemonClassifier(model_path="pokemon_classifier_crop_cards.pth", label_encoder_path='classes.npy')
+    classifier = PokemonClassifier(model_path="pokemon_classifier.pth", label_encoder_path='classes.npy')
     
     image_path = 'screenshot.png'
     try:
