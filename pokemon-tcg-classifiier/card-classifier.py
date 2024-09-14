@@ -93,7 +93,7 @@ pokemon_dataset = PokemonCardDataset(root_dir=dataset_path, transform=transform)
 train_loader = DataLoader(pokemon_dataset, batch_size=32, shuffle=True, num_workers=6, pin_memory=True)
 test_loader = DataLoader(pokemon_dataset, batch_size=64, shuffle=False, num_workers=6, pin_memory=True)
 
-device = torch.device("cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 
