@@ -31,11 +31,13 @@ class CropTopHalf(object):
         return cropped_img
     
 class PokemonClassifier:
-    def __init__(self, model_path: str, label_encoder_path: str, num_classes: int = 1289, device: str = None):
+    def __init__(self, model_path: str, label_encoder_path: str, device: str = None):
        
         self.device = torch.device(device if device else ("cuda" if torch.cuda.is_available() else "cpu"))
         
-        
+        #take from the file in label_encoder_path the number of classes
+        num_classes = len(np.load(label_encoder_path, allow_pickle=True))
+       
         self.model = efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT)
         
         self.model.classifier[1] = nn.Linear(self.model.classifier[1].in_features, num_classes)
@@ -54,9 +56,9 @@ class PokemonClassifier:
         CropTopHalf(),
         transforms.Resize((128, 96)),  
         #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
-        #transforms.RandomRotation(degrees=5),  
-        #transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
-       # transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
+        transforms.RandomRotation(degrees=5),  
+        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+        transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
@@ -81,9 +83,9 @@ class PokemonClassifier:
             CropTopHalf(),
             transforms.Resize((128, 96)),  
             #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
-            #transforms.RandomRotation(degrees=5),  
-            #transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
-            #transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
+            transforms.RandomRotation(degrees=5),  
+            transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+            transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
@@ -143,7 +145,7 @@ class PokemonClassifier:
 if __name__ == "__main__":
     classifier = PokemonClassifier(model_path="pokemon_classifier.pth", label_encoder_path='classes.npy')
     
-    image_path = 'base1_images/sv3-101.png'
+    image_path = 'base1_images/sv1-1.png'
     try:
    
         prediction = classifier.predict_image(image_path)
