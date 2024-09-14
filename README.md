@@ -91,4 +91,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgements
 
 - **[EfficientNet](https://arxiv.org/abs/1905.11946)**: For the model architecture.
+- **[Pokémon TCG SDK](https://github.com/PokemonTCG/pokemon-tcg-sdk-python)**: For fetching card data.
 - **[OpenCV](https://opencv.org/)**: For the computer vision tools used for image capture.
