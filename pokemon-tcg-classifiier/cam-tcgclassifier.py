@@ -116,6 +116,9 @@ def display_predicted_card(image_path):
     def on_next():
         print("Next button pressed")
         root.destroy()
+        success, roi = capture_image()
+        classify_and_show_image()
+        
 
     button_next = tk.Button(frame_button, text="Next", font=("Arial", 16), bg="blue", fg="white", command=on_next)
     button_next.pack()
@@ -146,5 +149,5 @@ if __name__ == "__main__":
         success, roi = capture_image()
         if success and roi is not None:
             classify_and_show_image()
-
-        print("Restarting webcam process...")
+            break
+        
