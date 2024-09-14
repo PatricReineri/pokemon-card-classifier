@@ -34,6 +34,7 @@ This project uses a fine-tuned **EfficientNetB1** model to recognize Pokémon ca
     python download_set.py
     ```
     The `download_set.py` script will create a `base1_images` folder for card images and a `base1` folder for JSON files. Make sure these directories are populated with the downloaded data.
+    The script uses the [Pokémon TCG SDK](https://github.com/PokemonTCG/pokemon-tcg-sdk-python) to fetch the necessary card data.
 
 4. **Train the model:**
 
