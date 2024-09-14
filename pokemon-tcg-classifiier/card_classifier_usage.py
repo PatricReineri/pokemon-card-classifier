@@ -81,9 +81,9 @@ class PokemonClassifier:
             CropTopHalf(),
             transforms.Resize((128, 96)),  
             #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
-            transforms.RandomRotation(degrees=5),  
-            transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
-            transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
+            #transforms.RandomRotation(degrees=5),  
+            #transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+            #transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
