@@ -77,7 +77,9 @@ transform =  transforms.Compose([
     transforms.Resize((128, 96)), 
     #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
     transforms.RandomRotation(degrees=5), 
-    transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
+    transforms.RandomApply([
+        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),    
+    ], p=0.5),
     transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
@@ -113,7 +115,7 @@ else:
     print(f"No pre-trained model found, starting training from scratch.")
 
 criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
-optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-4)
+optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=1e-62)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
 def train(model, device, train_loader, optimizer, criterion, epoch):
@@ -150,7 +152,7 @@ def test(model, device, test_loader, criterion):
 
 accuracy = 0 
 
-for epoch in range(1, 21):
+for epoch in range(1, 31):
     train(model, device, train_loader, optimizer, criterion, epoch)
     if epoch % 5 == 0:
         accuracy = test(model, device, test_loader, criterion)
