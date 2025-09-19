@@ -167,10 +167,9 @@ async def async_background_training(model_name: str, dataset_exists: bool = Fals
         training_status["error"] = None
         training_status["accuracy"] = None
         training_status["progress"] = 0
-        dataset_path = 'api/card_images'
+        dataset_path = 'card_images'
         if(not dataset_exists):
             # Crea la directory se non esiste
-            dataset_path = 'card_images'
             os.makedirs(dataset_path, exist_ok=True)
             training_status["progress"] = 10
             training_status["status"] = "downloading_data"
@@ -186,7 +185,7 @@ async def async_background_training(model_name: str, dataset_exists: bool = Fals
             raise Exception(f"No images found in {dataset_path} after download")
         
         print(f"Found {len(image_files)} images in dataset")
-        training_status["progress"] = 30
+        training_status["progress"] = 60
         training_status["status"] = "training_model"
         
         accuracy = train_model(model_name)
