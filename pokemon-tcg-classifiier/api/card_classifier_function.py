@@ -47,7 +47,7 @@ class PokemonCardDataset(Dataset):
         self.root_dir = root_dir
         self.transform = transform
         self.image_files = [f for f in os.listdir(root_dir) if os.path.isfile(os.path.join(root_dir, f))]
-        self.labels = [f.split('.')[0] for f in self.image_files]
+        self.labels = [os.path.splitext(f)[0] for f in self.image_files]
 
         self.label_encoder = LabelEncoder()
         self.label_encoder.fit(self.labels)
