@@ -117,7 +117,6 @@ def get_model(model_name, model_path, num_classes, device):
     model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
     model = model.to(device)
 
-    model_path = "pokemon_classifier.pth"
     if os.path.exists(model_path):
         print(f"Found existing model file '{model_path}', loading weights...")
         model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
@@ -126,7 +125,7 @@ def get_model(model_name, model_path, num_classes, device):
     
     return model
 
-def setup_training(model_name, pretrain_path="pokemon_classifier.pth"):
+def setup_training(model_name, pretrain_path="model/pokemon_classifier.pth"):
     
     #Initialize Dataset and DataLoader
     dataset_path = 'card_images'

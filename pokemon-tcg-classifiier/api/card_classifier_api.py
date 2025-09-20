@@ -16,8 +16,8 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 # Import training functions from card-classifier.py
-from api.card_classifier_function import train_model, get_model
-from api.download_sets import download_all_sets
+from card_classifier_function import train_model, get_model
+from download_sets import download_all_sets
 
 class AddGaussianNoise(object):
     def __init__(self, mean=0.0, std=1.0):
@@ -48,30 +48,19 @@ class TrainRequest(BaseModel):
     
 class PokemonClassifier:
     def __init__(self, model_name:str, model_path: str, label_encoder_path: str, device: str = None):
-       
         self.device = torch.device(device if device else ("cuda" if torch.cuda.is_available() else "cpu"))
         
-        #take from the file in label_encoder_path the number of classes
+        # Load number of classes
         num_classes = len(np.load(label_encoder_path, allow_pickle=True))
-       
-        self.model = get_model(model_name, model_path, num_classes, device)
+        
+        # Pass device parameter to get_model
+        self.model = get_model(model_name, model_path, num_classes, self.device)
         self.model.eval()
 
-       
+        # Load label encoder
         self.label_encoder = LabelEncoder()
         self.label_encoder.classes_ = np.load(label_encoder_path, allow_pickle=True)
 
-     
-        self.transform = transforms.Compose([
-        CropTopHalf(),
-        transforms.Resize((128, 96)),  
-        #transforms.Pad(padding=(16, 16), fill=0, padding_mode='constant'),  
-        transforms.RandomRotation(degrees=5),  
-        transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2),  
-        transforms.RandomPerspective(distortion_scale=0.2, p=0.5),  
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
     
     def predict_image(self, image_path: str) -> str:
         """
@@ -118,10 +107,14 @@ app = FastAPI()
 def predict(request: PredictRequest):
     classifier = None
     #check if the model and classes files exist
+    # Check if model and classes files exist
     if not os.path.exists("model/pokemon_classifier.pth"):
-        print("Model file not found. Please upload the model file.")
-    else:
-        classifier = PokemonClassifier(model_name=request.model_name, model_path="model/pokemon_classifier.pth", label_encoder_path="classes/classes.npy")
+        raise HTTPException(status_code=500, detail="Model file not found. Please train the model first.")
+    
+    if not os.path.exists("classes/classes.npy"):
+        raise HTTPException(status_code=500, detail="Classes file not found. Please train the model first.")
+    
+    classifier = PokemonClassifier(model_name=request.model_name, model_path="model/pokemon_classifier.pth", label_encoder_path="classes/classes.npy")
     
     if classifier is None:
         raise HTTPException(status_code=500, detail="Model not loaded.")
@@ -280,4 +273,4 @@ if __name__ == "__main__":
         print("Classes file not found. Please upload the classes file.")
 
     # Run the FastAPI app on host 0.0.0.0 and port 8000
-    uvicorn.run("api.card_classifier_api:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("card_classifier_api:app", host="0.0.0.0", port=8000, reload=True)
